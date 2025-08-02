@@ -29,10 +29,8 @@ jobs:
         uses: MauroDruwel/apt-repo-action@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          repo_supported_arch:
-            - amd64
-          repo_supported_version:
-            - bookworm
+          repo_supported_arch: amd64
+          repo_supported_version: bookworm
           file: package.deb
           file_target_version: bookworm
           public_key: ${{ secrets.REPO_PUBLIC_KEY }}
