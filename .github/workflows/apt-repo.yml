@@ -1,4 +1,4 @@
-#name: Build & Publish APT Repo
+name: Build & Publish APT Repo
 
 on:
   # Trigger the workflow on pushes to the 'main' branch
@@ -24,10 +24,10 @@ jobs:
           mv deb/fix-klik-kanan.deb package.deb
 
       - name: Publish APT Repo
-        # Use the apt-repo-action to build and sign the repository
+        # Use the apt-repo-action to build and sign the repository.
+        # This action automatically handles the target repository based on the GITHUB_TOKEN.
         uses: MauroDruwel/apt-repo-action@v4
         with:
-          # Correct indentation and spacing for the 'with' block
           github_token: ${{ secrets.GITHUB_TOKEN }}
           repo_supported_arch:
             - amd64
@@ -38,13 +38,12 @@ jobs:
           public_key: ${{ secrets.REPO_PUBLIC_KEY }}
           private_key: ${{ secrets.REPO_PRIVATE_KEY }}
           key_passphrase: ${{ secrets.REPO_GPG_PASSPHRASE }}
-          target_repository: bheibz/bebz-debian-setup
-
+          
       - name: Deploy to GitHub Pages
-        # Publish the 'repo' directory to GitHub Pages
+        # Publish the 'repo' directory to GitHub Pages.
+        # This action handles the Git credentials automatically.
         uses: peaceiris/actions-gh-pages@v4
         with:
-          # Correct indentation and spacing for the 'with' block
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: repo
           enable_jekyll: false
