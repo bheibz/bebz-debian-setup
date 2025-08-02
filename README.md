@@ -21,3 +21,13 @@ chmod +x install.sh
 ## 🐟 Fitur alias:
 - `a` = update, upgrade, bersih total
 - `d` = download URL/torrent cepat
+
+## 🖱️ Fix Klik Kanan Nautilus (New Document)
+
+Karena Debian 12 bisa menggunakan Bahasa Indonesia secara default, maka direktori `Templates` kadang diatur ke `Templat`, sehingga fitur klik kanan ➜ "New Document" tidak muncul.
+
+Gunakan skrip:
+
+```bash
+curl -s https://raw.githubusercontent.com/bheibz/bebz-debian-setup/main/fix-klik-kanan.sh | bash
+
