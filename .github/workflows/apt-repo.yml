@@ -1,8 +1,7 @@
 name: Build & Publish APT Repo
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -10,19 +9,16 @@ permissions:
 
 jobs:
   publish:
-    # Ini harus di sini, bukan dalam with:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Build .deb Package
+      - name: Build .deb
         run: |
           dpkg-deb --build deb/fix-klik-kanan
           mv deb/fix-klik-kanan.deb package.deb
 
-      - name: Publish APT Repo
+      - name: Publish APT Repo via MauroDruwel
         uses: MauroDruwel/apt-repo-action@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
