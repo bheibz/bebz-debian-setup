@@ -28,7 +28,7 @@ jobs:
         # This action automatically handles the target repository based on the GITHUB_TOKEN.
         uses: MauroDruwel/apt-repo-action@v4
         with:
-          target_repo: ${{ github.repository }}
+          target_repository: ${{ github.repository }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           repo_supported_arch: amd64
           repo_supported_version: bookworm
