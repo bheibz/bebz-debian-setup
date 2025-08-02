@@ -1,8 +1,8 @@
 name: Build & Publish APT Repo
+
 on:
   push:
-    branches: [ main ]
-
+    branches: [ main]
 permissions:
   contents: write
   pages: write
@@ -11,43 +11,38 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Build .deb
+      - name: Build.deb package
         run: |
           dpkg-deb --build deb/fix-klik-kanan
           mv deb/fix-klik-kanan.deb package.deb
 
-      - name: Publish APT Repo via MauroDruwel
+      - name: Set up git credentials
+        run: |
+          git config --global user.email"github-actions[bot]@users.noreply.github.com"
+          git config --global user.name"github-actions[bot]"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Publish APT Repo
         uses: MauroDruwel/apt-repo-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token:${{ secrets.GITHUB_TOKEN }}
           repo_supported_arch: |
             amd64
           repo_supported_version: |
             bookworm
           file: package.deb
           file_target_version: bookworm
-          public_key: ${{ secrets.REPO_PUBLIC_KEY }}
-          private_key: ${{ secrets.REPO_PRIVATE_KEY }}
-          key_passphrase: ${{ secrets.REPO_GPG_PASSPHRASE }}
+          public_key:${{ secrets.REPO_PUBLIC_KEY }}
+          private_key:${{ secrets.REPO_PRIVATE_KEY }}
+          key_passphrase:${{ secrets.REPO_GPG_PASSPHRASE }}
           target_repository: bheibz/bebz-debian-setup
-- name: Setup GitHub authentication
-  run: |
-    git config --global user.email "github-actions[bot]@users.noreply.github.com"
-    git config --global user.name "github-actions[bot]"
-    git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token:${{ secrets.GITHUB_TOKEN }}
           publish_dir: repo
           enable_jekyll: false
-- name: Set up git credentials
-  run: |
-    git config --global user.email "github-actions[bot]@users.noreply.github.com"
-    git config --global user.name "github-actions[bot]"
-    git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-- name: Push to gh-pages
-  run: |
-    git push --set-upstream origin gh-pages
