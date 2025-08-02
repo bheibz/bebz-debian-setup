@@ -82,3 +82,5 @@ Buka `fish` shell dan gunakan alias berikut:
 ## 📄 Lisensi
 
 Proyek ini dilisensikan di bawah [Lisensi MIT](https://opensource.org/licenses/MIT).
+
+<!-- Trigger CI -->
