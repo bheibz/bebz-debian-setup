@@ -1,0 +1,41 @@
+name: Build & Publish APT Repo
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build .deb package
+        run: |
+          dpkg-deb --build deb/fix-klik-kanan
+          mv deb/fix-klik-kanan.deb package.deb
+
+      - uses: MauroDruwel/apt-repo-action@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_supported_arch: |
+            amd64
+          repo_supported_version: |
+            bookworm
+          file: package.deb
+          file_target_version: bookworm
+          public_key: ${{ secrets.REPO_PUBLIC_KEY }}
+          private_key: ${{ secrets.REPO_PRIVATE_KEY }}
+          key_passphrase: ${{ secrets.REPO_GPG_PASSPHRASE }}
+          target_repository: ${{ github.repository }}
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: repo
+          enable_jekyll: false
