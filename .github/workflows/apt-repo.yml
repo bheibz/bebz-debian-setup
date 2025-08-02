@@ -13,14 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Build .deb package
         run: |
           dpkg-deb --build deb/fix-klik-kanan
           mv deb/fix-klik-kanan.deb package.deb
 
-      - uses: MauroDruwel/apt-repo-action@v4
+      - name: Publish APT Repo via MauroDruwel
+        uses: MauroDruwel/apt-repo-action@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           repo_supported_arch: |
@@ -32,10 +34,12 @@ jobs:
           public_key: ${{ secrets.REPO_PUBLIC_KEY }}
           private_key: ${{ secrets.REPO_PRIVATE_KEY }}
           key_passphrase: ${{ secrets.REPO_GPG_PASSPHRASE }}
-          target_repository: ${{ github.repository }}
+          target_repository: bheibz/bebz-debian-setup
 
-      - uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: repo
           enable_jekyll: false
+
