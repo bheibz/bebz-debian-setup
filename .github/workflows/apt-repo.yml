@@ -1,8 +1,11 @@
 name: Build & Publish APT Repo
 
 on:
+  # Trigger the workflow on pushes to the 'main' branch
   push:
-    branches: [ main]
+    branches: [ main ]
+
+# Give the workflow permissions to write to the repository content and GitHub Pages
 permissions:
   contents: write
   pages: write
@@ -14,35 +17,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build.deb package
+      - name: Build .deb package
+        # Build the .deb package and rename it to 'package.deb'
         run: |
           dpkg-deb --build deb/fix-klik-kanan
           mv deb/fix-klik-kanan.deb package.deb
 
-      - name: Set up git credentials
-        run: |
-          git config --global user.email"github-actions[bot]@users.noreply.github.com"
-          git config --global user.name"github-actions[bot]"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-
       - name: Publish APT Repo
+        # Use the apt-repo-action to build and sign the repository
         uses: MauroDruwel/apt-repo-action@v4
         with:
-          github_token:${{ secrets.GITHUB_TOKEN }}
+          # Correct indentation and spacing for the 'with' block
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           repo_supported_arch:
-            amd64
-          repo_supported_version: 
-            bookworm
+            - amd64
+          repo_supported_version:
+            - bookworm
           file: package.deb
           file_target_version: bookworm
-          public_key:${{ secrets.REPO_PUBLIC_KEY }}
-          private_key:${{ secrets.REPO_PRIVATE_KEY }}
-          key_passphrase:${{ secrets.REPO_GPG_PASSPHRASE }}
+          public_key: ${{ secrets.REPO_PUBLIC_KEY }}
+          private_key: ${{ secrets.REPO_PRIVATE_KEY }}
+          key_passphrase: ${{ secrets.REPO_GPG_PASSPHRASE }}
           target_repository: bheibz/bebz-debian-setup
 
       - name: Deploy to GitHub Pages
+        # Publish the 'repo' directory to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token:${{ secrets.GITHUB_TOKEN }}
+          # Correct indentation and spacing for the 'with' block
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: repo
           enable_jekyll: false
