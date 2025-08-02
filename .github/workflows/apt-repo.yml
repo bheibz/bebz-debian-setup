@@ -10,18 +10,19 @@ permissions:
 
 jobs:
   publish:
+    # Ini harus di sini, bukan dalam with:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build .deb package
+      - name: Build .deb Package
         run: |
           dpkg-deb --build deb/fix-klik-kanan
           mv deb/fix-klik-kanan.deb package.deb
 
-      - name: Publish APT Repo via MauroDruwel
+      - name: Publish APT Repo
         uses: MauroDruwel/apt-repo-action@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
