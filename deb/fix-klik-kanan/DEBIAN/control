@@ -1,0 +1,5 @@
+Package: bebz-fix-klik-kanan
+Version: 1.0-1
+Architecture: amd64
+Maintainer: Idrus Alhadad <id12us@gmmail.com>
+Description: Perbaikan klik kanan GNOME & auto-update
